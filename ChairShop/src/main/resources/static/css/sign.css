@@ -10,19 +10,19 @@ body {
 }
 .wrapper {
   width: 100%;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #ebecf0;
   overflow: hidden;
 }
-.container {
+.wrapper .container {
   border-radius: 10px;
   box-shadow: -5px -5px 10px #fff, 5px 5px 10px #babebc;
   position: absolute;
   width: 768px;
-  min-height: 480px;
+  min-height: 520px;
   overflow: hidden;
 }
 form {
@@ -36,7 +36,7 @@ form {
 }
 form input {
   background: #eee;
-  padding: 16px;
+  padding: 10px;
   margin: 8px 0;
   width: 85%;
   border: 0;
@@ -50,7 +50,7 @@ button {
   outline: none;
   font-size: 12px;
   font-weight: bold;
-  padding: 15px 45px;
+  padding: 10px 45px;
   margin: 14px;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -66,7 +66,7 @@ button {
 }
 .send-mail {
   background: #eee;
-  padding: 16px;
+  padding: 10px;
   margin: 8px 0;
   width: 85%;
   border: 0;
@@ -75,9 +75,9 @@ button {
   box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
 }
 .overlay_btn {
-  background-color: #ff4b2b;
+  background-color: #3C5D50;
   color: #fff;
-  box-shadow: -5px -5px 10px #ff6b3f, 5px 5px 8px #bf4b2b;
+  box-shadow: -5px -5px 10px rgb(78, 106, 94), 5px 5px 8px rgb(53, 73, 64);
   width: 180px;
 }
 .sign-in-container {
@@ -106,7 +106,7 @@ button {
   width: 50%;
   height: 100%;
   opacity: 0;
-  background-color: #ff4b2b;
+  background-color: #3C5D50;
   color: #fff;
   transition: all 0.5s;
 }
@@ -120,7 +120,7 @@ button {
   right: 0;
   width: 50%;
   height: 100%;
-  background-color: #ff4b2b;
+  background-color: #3C5D50;
   color: #fff;
   transition: all 0.5s;
 }
