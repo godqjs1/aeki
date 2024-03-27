@@ -59,14 +59,26 @@ button {
 }
 .form_btn {
   box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
+  width: 180px;
 }
 .form_btn:active {
   box-shadow: inset 1px 1px 2px #babebc, inset -1px -1px 2px #fff;
+}
+.send-mail {
+  background: #eee;
+  padding: 16px;
+  margin: 8px 0;
+  width: 85%;
+  border: 0;
+  outline: none;
+  border-radius: 20px;  
+  box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
 }
 .overlay_btn {
   background-color: #ff4b2b;
   color: #fff;
   box-shadow: -5px -5px 10px #ff6b3f, 5px 5px 8px #bf4b2b;
+  width: 180px;
 }
 .sign-in-container {
   position: absolute;
