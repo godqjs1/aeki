@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.port.chairshop.UserMapper">
+	<insert id="insertUser" parameterType="com.port.chairshop.vo.UserVO">
+    INSERT INTO USER (NAME, EMAIL, PASSWORD) VALUES (#{name}, #{email}, #{password})
+</insert>
+
+</mapper>
