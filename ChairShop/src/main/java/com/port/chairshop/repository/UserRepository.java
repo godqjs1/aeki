@@ -1,4 +1,4 @@
-package com.port.chairshop.service.repository;
+package com.port.chairshop.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
