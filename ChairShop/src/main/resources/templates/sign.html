@@ -24,8 +24,10 @@
     <div class="sign-in-container">
       <form method="post" action="/signIn">
         <h1 style="margin-bottom: 1rem;">Sign In</h1>       
-        <input type="email" placeholder="Email" name="email">
+        <input type="email" placeholder="Email" name="email" th:value="${user.email}">
+        <span class="text-danger" th:text="${valid_email}"></span>
         <input type="password" placeholder="Password" name="password">
+        <span class="text-danger" th:text="${valid_password}"></span>
         <button class="form_btn">Sign In</button>
         <a style="margin-top: 1rem;" href="#">
         	<img src="images/kakao_login_medium_narrow.png">

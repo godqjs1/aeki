@@ -15,7 +15,7 @@ public class UserRepository {
 	public int insertUser(UserVO UserVO) {
 		return mapper.insertUser(UserVO);
 	}
-	
+  
 	public UserVO findByEmail(String email) {
 		return mapper.findByEmail(email);
 	}
