@@ -5,20 +5,34 @@
 
 <link href="css/sign.css" rel="stylesheet">
 <script src="js/sign.js"></script>		
+<script th:inline="javascript">
+var check = /*[[${check}]]*/ 0; // Thymeleaf에서 가져온 변수
+var message = /*[[${msg}]]*/ ''; // Thymeleaf에서 가져온 변수
+// Thymeleaf에서 가져온 변수를 JavaScript 코드 내에서 사용합니다.
+if (check === 2) {
+    alert(message);
+}
+/*]]>*/
+</script>
 
 <div class="wrapper">
   <div class="container signContainer">
     <div class="sign-up-container">
     <!-- 회원가입 성공 시에 성공 메시지를 띄우기 위해 Thymeleaf의 조건문 사용 -->
-            <div th:if="${success}" class="success-message">회원가입에 성공했습니다!</div>
-      <form name="insertUser" method="post">
+       	<input type="hidden" th:value="${signup}" name="signupChk">
+      	<form name="signup" method="post" action="/signup">
         <h1 style="margin-bottom: 1rem;">Create Account</h1>        
         <input type="text" name="name" placeholder="Name">
+        <span class="text-danger" th:text="${valid_name}"></span>
         <input type="email" name="email" placeholder="Email">
+        <span class="text-danger" th:text="${valid_email}"></span>
+        <div th:if="${error}" th:text="${error}"></div>
         <!-- <button class="send-mail">Send Number</button>
         <input type="text" placeholder="Number">         -->     
-        <input type="password" name="password" placeholder="Password">        
+        <input type="password" name="password" placeholder="Password">
+        <span class="text-danger" th:text="${valid_password}"></span>        
         <button class="form_btn">Sign Up</button>
+        <input type="hidden" th:value="${signup}" name="signupChk">
       </form>
     </div>
     <div class="sign-in-container">
