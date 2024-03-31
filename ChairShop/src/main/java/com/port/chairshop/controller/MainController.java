@@ -14,6 +14,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.port.chairshop.service.UserService;
 import com.port.chairshop.vo.UserVO;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 import jakarta.validation.Valid;
 
 @Controller
@@ -28,7 +31,6 @@ public class MainController {
 	public String sign(Model model) {
 		UserVO userVO = new UserVO(); // UserVO 객체 초기화
 		model.addAttribute("user", userVO);
-//		model.addAttribute("check",1);
 		return "/sign";
 	}
 	
@@ -62,6 +64,7 @@ public class MainController {
 		userVO.setPassword(encodePw);
 		
 		redirectAttributes.addFlashAttribute("check", 2);
+    
 		if (us.insertUser(userVO) > 0) {
 			logger.info("sign 진입");			
 			logger.info("check 진입");
@@ -80,7 +83,7 @@ public class MainController {
 	}		
 	
 	@PostMapping("/signIn")
-	public String signIn(@Valid UserVO userVO, Errors errors, Model model) {
+	public String signIn(@Valid UserVO userVO, Errors errors, Model model, HttpServletRequest req) {
 		
 		if (errors.hasErrors()) {
 			/* 로그인 실패시 입력 데이터 값을 유지 */
@@ -95,18 +98,26 @@ public class MainController {
 			return "/sign";
 		}
 		
+		UserVO userInfo = us.selectUser(userVO); 
 		
-//		String encodePw = us.selectPassword(userVO);
-//		String inputPw = userVO.getPassword();
+		// 암호화되어 데이터베이스에 저장된 비밀번호
+		String encodePw = userInfo.getPassword();
+		// 로그인시 입력한 비밀번호
+		String inputPw = userVO.getPassword();
 		
 		// 암호화된 비밀번호와 입력한 비밀번호를 비교하여 일치하는지 확인
-	    boolean passwordMatches = us.matchesBcrypt(userVO.getPassword(), us.selectPassword(userVO));
+	    boolean passwordMatches = us.matchesBcrypt(inputPw, encodePw);
 		
+	    HttpSession session = req.getSession();
+	    
 	    if (passwordMatches) {
+	    	
+	    	session.setAttribute("user", userInfo);
+	    	
 	    	return "/index";
 	    }
 	    else {
-	    	return "/cart";
+	    	return "/sign";
 	    }
 		
 		

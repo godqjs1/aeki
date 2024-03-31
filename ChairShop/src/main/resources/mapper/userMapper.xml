@@ -11,8 +11,8 @@
         SELECT * FROM user WHERE email = #{email}        
 	</select>
 	 
-	<select id="selectPassword" parameterType="com.port.chairshop.vo.UserVO">
-		SELECT password FROM user WHERE email = #{email}
+	<select id="selectUser" parameterType="com.port.chairshop.vo.UserVO" resultType="com.port.chairshop.vo.UserVO">
+		SELECT * FROM user WHERE email = #{email}
 	</select>
 	
 </mapper>
