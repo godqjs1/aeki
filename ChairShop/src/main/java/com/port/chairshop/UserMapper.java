@@ -10,5 +10,5 @@ public interface UserMapper {
 	
 	public UserVO findByEmail(String email);
 	
-	public String selectPassword(UserVO UserVO);
+	public UserVO selectUser(UserVO userVO);
 }

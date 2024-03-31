@@ -56,8 +56,8 @@ public class UserService {
 		return validatorResult;
 	}
 	
-	public String selectPassword(UserVO UserVO) {
-		return ur.selectPassword(UserVO);
+	public UserVO selectUser(UserVO userVO) {
+		return ur.selectUser(userVO);
 	}
 	
 	public boolean matchesBcrypt(String planeText, String hashValue) {

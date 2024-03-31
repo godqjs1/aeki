@@ -20,8 +20,8 @@ public class UserRepository {
 		return mapper.findByEmail(email);
 	}
 	
-	public String selectPassword(UserVO UserVO) {
-		return mapper.selectPassword(UserVO);
+	public UserVO selectUser(UserVO userVO) {
+		return mapper.selectUser(userVO);
 	}
 	
 }
