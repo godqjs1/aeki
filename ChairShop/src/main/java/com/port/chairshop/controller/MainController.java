@@ -86,14 +86,17 @@ public class MainController {
 	public String signIn(@Valid UserVO userVO, Errors errors, Model model, HttpServletRequest req) {
 		
 		if (errors.hasErrors()) {
+			
 			/* 로그인 실패시 입력 데이터 값을 유지 */
 			model.addAttribute("user", userVO);
 			
 			/* 유효성 통과 못한 필드와 메시지를 핸들링 */
 			Map<String, String> validatorResult = us.validateHandling(errors);
+			
 			for (String key : validatorResult.keySet()) {
 				model.addAttribute(key, validatorResult.get(key));
 			}
+			
 			/* 로그인 페이지로 다시 리턴 */
 			return "/sign";
 		}
@@ -104,6 +107,7 @@ public class MainController {
 		String encodePw = userInfo.getPassword();
 		// 로그인시 입력한 비밀번호
 		String inputPw = userVO.getPassword();
+		
 		
 		// 암호화된 비밀번호와 입력한 비밀번호를 비교하여 일치하는지 확인
 	    boolean passwordMatches = us.matchesBcrypt(inputPw, encodePw);
