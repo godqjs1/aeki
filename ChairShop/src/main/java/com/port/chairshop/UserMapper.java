@@ -8,4 +8,6 @@ public interface UserMapper {
 		
 	public int insertUser(UserVO UserVO);
 	
+	public UserVO findByEmail(String email);
+	
 }

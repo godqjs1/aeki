@@ -3,7 +3,11 @@
 
 <mapper namespace="com.port.chairshop.UserMapper">
 	<insert id="insertUser" parameterType="com.port.chairshop.vo.UserVO">
-    INSERT INTO USER (NAME, EMAIL, PASSWORD) VALUES (#{name}, #{email}, #{password})
+    INSERT INTO user (name, email, password) VALUES (#{name}, #{email}, #{password})
 </insert>
+
+<select id="findByEmail" resultType="com.port.chairshop.vo.UserVO">
+        SELECT * FROM user WHERE email = #{email}
+</select>
 
 </mapper>

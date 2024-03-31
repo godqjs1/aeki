@@ -1,14 +1,15 @@
   package com.port.chairshop.vo;  
 
-  import lombok.Getter; 
-  import lombok.Setter;
-  
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
   @Getter  
   @Setter  
-  
-  public class UserVO {
-	  private String name;
-	  private String email;
+  @Data
+  public class UserVO {			  	  
+	  private String name;	 
+	  private String email;	  
 	  private String password;
   }
  
