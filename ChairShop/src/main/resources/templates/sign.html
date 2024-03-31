@@ -9,6 +9,8 @@
 <div class="wrapper">
   <div class="container signContainer">
     <div class="sign-up-container">
+    <!-- 회원가입 성공 시에 성공 메시지를 띄우기 위해 Thymeleaf의 조건문 사용 -->
+            <div th:if="${success}" class="success-message">회원가입에 성공했습니다!</div>
       <form name="insertUser" method="post">
         <h1 style="margin-bottom: 1rem;">Create Account</h1>        
         <input type="text" name="name" placeholder="Name">
