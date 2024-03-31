@@ -73,11 +73,11 @@ public class MainController {
 	}
   
 	@PostMapping("/signIn")
-	public String signIn(@Valid UserVO UserVO, Errors errors, Model model) {
+	public String signIn(@Valid UserVO userVO, Errors errors, Model model) {
 		
 		if (errors.hasErrors()) {
 			/* 로그인 실패시 입력 데이터 값을 유지 */
-			model.addAttribute("user", UserVO);
+			model.addAttribute("user", userVO);
 			
 			/* 유효성 통과 못한 필드와 메시지를 핸들링 */
 			Map<String, String> validatorResult = us.validateHandling(errors);
@@ -89,8 +89,19 @@ public class MainController {
 		}
 		
 		
+//		String encodePw = us.selectPassword(userVO);
+//		String inputPw = userVO.getPassword();
 		
-		return "/index";
+		// 암호화된 비밀번호와 입력한 비밀번호를 비교하여 일치하는지 확인
+	    boolean passwordMatches = us.matchesBcrypt(userVO.getPassword(), us.selectPassword(userVO));
+		
+	    if (passwordMatches) {
+	    	return "/index";
+	    }
+	    else {
+	    	return "/cart";
+	    }
+		
 		
 	}
   
