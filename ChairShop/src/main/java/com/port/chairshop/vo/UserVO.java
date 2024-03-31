@@ -18,7 +18,8 @@ public class UserVO {
 	  
 	private String name;
 	  
-	@NotBlank(message = "Email을 입력해주세요.22222")
+	@NotBlank(message = "Email을 입력해주세요.")
+  
 	private String email;
   
 	@NotBlank(message = "Password를 입력해주세요.")
