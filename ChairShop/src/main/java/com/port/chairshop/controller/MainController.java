@@ -26,7 +26,11 @@ public class MainController {
 
 	@Autowired
 	UserService us;
-  
+	
+	@GetMapping("/index")
+	public void index() {
+	}
+	
 	@GetMapping("/sign")
 	public String sign(Model model) {
 		UserVO userVO = new UserVO(); // UserVO 객체 초기화
@@ -36,6 +40,7 @@ public class MainController {
 	
 	@PostMapping("/signup")
 	public String signUp(@Valid UserVO userVO, Errors errors, Model model, RedirectAttributes redirectAttributes) {
+		
 		if (errors.hasErrors()) {
 			/* 로그인 실패시 입력 데이터 값을 유지 */
 			model.addAttribute("user", userVO);
@@ -83,7 +88,7 @@ public class MainController {
 	}		
 	
 	@PostMapping("/signIn")
-	public String signIn(@Valid UserVO userVO, Errors errors, Model model, HttpServletRequest req) {
+	public String signIn(@Valid UserVO userVO, Errors errors, Model model, HttpServletRequest req, RedirectAttributes redirectAttributes) {
 		
 		if (errors.hasErrors()) {
 			
@@ -103,6 +108,12 @@ public class MainController {
 		
 		UserVO userInfo = us.selectUser(userVO); 
 		
+		if (userInfo == null) {
+			redirectAttributes.addFlashAttribute("check", 2);
+			redirectAttributes.addFlashAttribute("msg", "가입되지 않은 email입니다.");
+	    	return "redirect:/sign";
+		}
+		
 		// 암호화되어 데이터베이스에 저장된 비밀번호
 		String encodePw = userInfo.getPassword();
 		// 로그인시 입력한 비밀번호
@@ -118,10 +129,12 @@ public class MainController {
 	    	
 	    	session.setAttribute("user", userInfo);
 	    	
-	    	return "/index";
+	    	return "redirect:/index";
 	    }
 	    else {
-	    	return "/sign";
+	    	redirectAttributes.addFlashAttribute("check", 2);
+	    	redirectAttributes.addFlashAttribute("msg", "비밀번호를 다시 입력하세요.");
+	    	return "redirect:/sign";
 	    }
 		
 		
