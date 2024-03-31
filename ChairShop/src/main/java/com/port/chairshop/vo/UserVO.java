@@ -15,11 +15,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class UserVO {
-	  
+	@NotBlank(message = "Name을 입력해주세요.")
 	private String name;
 	  
 	@NotBlank(message = "Email을 입력해주세요.")
-  
 	private String email;
   
 	@NotBlank(message = "Password를 입력해주세요.")
