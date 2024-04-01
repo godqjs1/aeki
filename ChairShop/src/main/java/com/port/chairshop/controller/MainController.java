@@ -139,6 +139,24 @@ public class MainController {
 		
 		
 	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest req) {
+		
+//		req.getSession(false)는 세션이 이미 존재하면 현재 세션을 반환하고, 
+//		세션이 존재하지 않으면 새로운 세션을 생성하지 않고 null을 반환합니다.
+//		
+//		이렇게 사용하는 이유는 로그아웃 기능과 같이 세션을 삭제하고자 할 때, 
+//		세션이 없는 경우에는 삭제할 세션이 없기 때문에 새로운 세션을 생성하지 않도록 하기 위해서입니다.
+		
+		HttpSession session = req.getSession(false); // 기존 세션이 있으면 가져옴
+        if (session != null) {
+            session.invalidate(); // 세션을 무효화하여 삭제
+        }
+        
+        return "redirect:/index"; // 로그아웃 후 인덱스 페이지로 리다이렉트
+		
+	}
   
 	@GetMapping("/shop")
 	public void shop() {
