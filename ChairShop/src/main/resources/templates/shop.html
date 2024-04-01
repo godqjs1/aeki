@@ -28,7 +28,7 @@
 
 		      		<!-- Start Column 1 -->
 					<div class="col-12 col-md-4 col-lg-3 mb-5">
-						<a class="product-item" href="#">
+						<a class="product-item" th:href="@{/shopCart(email=${session.user.email}, product='Nordic', price=78000, img='product-1.png')}">
 							<img src="images/product-1.png" class="img-fluid product-thumbnail">
 							<h3 class="product-title">Nordic</h3>
 							<strong class="product-price">78,000</strong>

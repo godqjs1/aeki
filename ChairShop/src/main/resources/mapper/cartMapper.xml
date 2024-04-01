@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.port.chairshop.CartMapper">
+
+	<select id="productChk" parameterType="com.port.chairshop.vo.CartVO">        
+        SELECT COUNT(*) FROM cart WHERE email = #{email} and product = #{product}        
+	</select>
+	
+	<insert id="insertCart" parameterType="com.port.chairshop.vo.CartVO">
+		INSERT INTO cart 
+		(email, product, qty, price, img) 
+		VALUES 
+		(#{email}, #{product}, 1, #{price}, #{img})
+	</insert>
+	
+	<update id="addCart" parameterType="com.port.chairshop.vo.CartVO">
+		UPDATE cart 
+		SET qty = qty + 1
+		WHERE email = #{email}		
+	</update>
+</mapper>

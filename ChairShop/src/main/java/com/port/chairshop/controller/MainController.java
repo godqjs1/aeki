@@ -10,13 +10,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.port.chairshop.service.CartService;
 import com.port.chairshop.service.UserService;
+import com.port.chairshop.vo.CartVO;
 import com.port.chairshop.vo.UserVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-
 import jakarta.validation.Valid;
 
 @Controller
@@ -27,9 +30,14 @@ public class MainController {
 	@Autowired
 	UserService us;
 	
+	@Autowired
+	CartService cs;
+	
 	@GetMapping("/index")
 	public void index() {
 	}
+	
+	/*=================================================== sign ===================================================*/
 	
 	@GetMapping("/sign")
 	public String sign(Model model) {
@@ -158,10 +166,41 @@ public class MainController {
 		
 	}
   
+	/*=================================================== cart ===================================================*/
+	
 	@GetMapping("/shop")
 	public void shop() {
 	}
 
+	@GetMapping("/shopCart")
+	public String shopCart(
+			@RequestParam("email") String email, 
+			@RequestParam("product") String product, 
+			@RequestParam("price") int price, 
+			@RequestParam("img") String img) {
+		
+		
+		logger.info("shopCart 진입");
+		
+		CartVO cartVO = new CartVO();
+		cartVO.setEmail(email);
+        cartVO.setProduct(product);
+        cartVO.setPrice(price);
+        cartVO.setImg(img);
+		
+
+        if (cs.productChk(cartVO) > 0) {
+            // 이미 상품이 장바구니에 담겨있는 경우
+        	cs.addCart(cartVO);
+        } else {
+        	// 장바구니에 새로 생성
+        	cs.insertCart(cartVO);
+        }
+        
+		return "/cart";
+		
+	}
+	
 	@GetMapping("/cart")
 	public void cart() {
 	}
