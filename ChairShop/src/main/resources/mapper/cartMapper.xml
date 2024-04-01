@@ -17,6 +17,6 @@
 	<update id="addCart" parameterType="com.port.chairshop.vo.CartVO">
 		UPDATE cart 
 		SET qty = qty + 1
-		WHERE email = #{email}		
+		WHERE email = #{email} and product = #{product}		
 	</update>
 </mapper>
