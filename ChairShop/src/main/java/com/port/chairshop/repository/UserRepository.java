@@ -22,6 +22,6 @@ public class UserRepository {
 	
 	public UserVO selectUser(UserVO userVO) {
 		return mapper.selectUser(userVO);
-	}
+	}		
 	
 }

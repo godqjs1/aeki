@@ -1,5 +1,6 @@
 package com.port.chairshop.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -212,23 +213,67 @@ public class MainController {
         	cs.insertCart(cartVO);
         }
         
-		return "/cart";
+		return "redirect:/cart";
 		
 	}
 	
 	@GetMapping("/cart")
-	public void cart(HttpServletRequest req) {
-//		HttpSession session = req.getSession(false);
-//		
-//		UserVO userVO = (UserVO) session.getAttribute("user");
-//        if (userVO != null) {
-//            String email = userVO.getEmail();
-//            logger.info(email);
-//        }
-        
-        
-        
+	public String cart(HttpServletRequest req, Model model) {
+	    HttpSession session = req.getSession(false);
+	    UserVO userVO = (UserVO) session.getAttribute("user");
+	    logger.info("------------------------");
+	    String email = userVO.getEmail();
+	    logger.info(email);
+	    List<CartVO> cart = cs.selectCart(email);
+	    model.addAttribute("cart", cart);
+	    return "cart"; // 뷰 이름을 반환합니다.
+
 	}
+	
+	@GetMapping("/cart/remove")
+    public String deleteCart(
+    		@RequestParam("email") String email, 
+			@RequestParam("product") String product
+			
+    		) 
+			{								
+			CartVO cartVO = new CartVO();
+			cartVO.setEmail(email);
+	        cartVO.setProduct(product);	        
+	        
+	        cs.deleteCart(cartVO);
+	        logger.info("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+	        return "redirect:/cart";
+    }
+	
+	 @GetMapping("/add")
+	    public String addCart(
+	    		@RequestParam("email") String email, 
+				@RequestParam("product") String product				
+	    		)  
+	 	{
+		 	CartVO cartVO = new CartVO();
+			cartVO.setEmail(email);
+	        cartVO.setProduct(product);
+	        
+	        cs.addCart(cartVO);
+	        return "redirect:/cart";
+	    }
+
+	 @GetMapping("/minus")
+	    public String minusCart(
+	    		@RequestParam("email") String email, 
+				@RequestParam("product") String product				
+	    		)  
+	 	{
+		 	CartVO cartVO = new CartVO();
+			cartVO.setEmail(email);
+	        cartVO.setProduct(product);
+	        
+	        cs.minus(cartVO);
+	        return "redirect:/cart";
+	    }  		
+	
 
 	@GetMapping("/orderList")
 	public void orderList() {

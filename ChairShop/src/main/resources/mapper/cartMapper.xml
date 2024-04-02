@@ -17,6 +17,23 @@
 	<update id="addCart" parameterType="com.port.chairshop.vo.CartVO">
 		UPDATE cart 
 		SET qty = qty + 1
-		WHERE email = #{email} and product = #{product}		
+		WHERE email = #{email} and product = #{product} 		
 	</update>
+	
+	<select id="selectCart" parameterType="com.port.chairshop.vo.CartVO">
+		select * from cart where email=#{email}
+	</select>
+	
+	<delete id="deleteCart" parameterType="com.port.chairshop.vo.CartVO">
+		DELETE FROM cart
+        WHERE email = #{email}
+        AND product = #{product}
+	</delete>
+	
+	<update id="minusCart" parameterType="com.port.chairshop.vo.CartVO">
+        UPDATE cart
+        SET qty = qty - 1
+        WHERE email = #{email} AND product = #{product} AND qty > 0
+    </update>
+	
 </mapper>

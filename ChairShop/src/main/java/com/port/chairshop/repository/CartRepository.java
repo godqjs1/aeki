@@ -1,5 +1,7 @@
 package com.port.chairshop.repository;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +25,17 @@ public class CartRepository {
 	public void addCart(CartVO cartVO) {
 		mapper.addCart(cartVO);
 	}
+	
+	public List<CartVO> selectCart(String email) {		
+		return mapper.selectCart(email);		
+	}
+	
+	public void deleteCart(CartVO cartVO) {
+		mapper.deleteCart(cartVO);
+	}
+	
+	public void minusCart(CartVO cartVO) {
+		mapper.minusCart(cartVO);
+	}
+	
 }
