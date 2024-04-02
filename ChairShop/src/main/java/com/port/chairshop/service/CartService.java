@@ -1,5 +1,9 @@
 package com.port.chairshop.service;
 
+
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +26,17 @@ public class CartService {
 	
 	public void addCart(CartVO cartVO) {
 		cr.addCart(cartVO);
+	}
+
+	public List<CartVO> selectCart(String email) {		
+		return cr.selectCart(email);
+	}
+	
+	public void deleteCart(CartVO cartVO) {
+		cr.deleteCart(cartVO);
+	}
+	
+	public void minus(CartVO cartVO) {
+		cr.minusCart(cartVO);
 	}
 }

@@ -39,60 +39,53 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
+                        <tr th:each="cart : ${cart}">
                           <td class="product-thumbnail">
-                            <img src="images/product-1.png" alt="Image" class="img-fluid">
+                            <img th:src="${cart.img}" alt="Image" class="img-fluid">
                           </td>
                           <td class="product-name">
-                            <h2 class="h5 text-black">Product 1</h2>
+                              <h2 class="h5 text-black" th:text="${cart.product}"></h2>
                           </td>
-                          <td>$49.00</td>
+                          <td th:text="${cart.price}"></td>
                           <td>
                             <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
                               <div class="input-group-prepend">
                                 <button class="btn btn-outline-black decrease" type="button">&minus;</button>
                               </div>
-                              <input type="text" class="form-control text-center quantity-amount" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                              <input type="text" class="form-control text-center quantity-amount" th:value="${cart.qty}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                               <div class="input-group-append">
-                                <button class="btn btn-outline-black increase" type="button">&plus;</button>
+                                <!-- <button class="btn btn-outline-black increase" type="button">&plus;</button> -->
+                                <button class="btn btn-outline-black increase" type="button" data-url="@{/add(email=${cart.email},product=${cart.product})}">&plus;</button>
+                                
                               </div>
                             </div>
         
-                          </td>
-                          <td>$49.00</td>
-                          <td><a href="#" class="btn btn-black btn-sm">X</a></td>
-                        </tr>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        					
+<script>
+$(document).ready(function() {
+    $('.increase').click(function() {
+        var url = $(this).data('url');
+        window.location.href = url;
+    });
+});
+
+</script> -->
         
-                        <tr>
-                          <td class="product-thumbnail">
-                            <img src="images/product-2.png" alt="Image" class="img-fluid">
-                          </td>
-                          <td class="product-name">
-                            <h2 class="h5 text-black">Product 2</h2>
-                          </td>
-                          <td>$49.00</td>
-                          <td>
-                            <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
-                              <div class="input-group-prepend">
-                                <button class="btn btn-outline-black decrease" type="button">&minus;</button>
-                              </div>
-                              <input type="text" class="form-control text-center quantity-amount" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                              <div class="input-group-append">
-                                <button class="btn btn-outline-black increase" type="button">&plus;</button>
-                              </div>
-                            </div>
         
-                          </td>
+                          </td>                          
                           <td>$49.00</td>
-                          <td><a href="#" class="btn btn-black btn-sm">X</a></td>
-                        </tr>
+                          <td><a th:href="@{/cart/remove(email=${cart.email},product=${cart.product})}" class="btn btn-black btn-sm">X</a></td>
+                          <td><a th:href="@{/add(email=${cart.email},product=${cart.product})}" class="btn btn-black btn-sm">a</a></td>
+                          <td><a th:href="@{/minus(email=${cart.email},product=${cart.product})}" class="btn btn-black btn-sm">m</a></td>
+                        </tr>                               
                       </tbody>
                     </table>
                   </div>
                 </form>
               </div>
         
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col-md-6">
                   <div class="row mb-5">
                     <div class="col-md-6 mb-3 mb-md-0">
@@ -150,10 +143,10 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 		
 
-		<!-- Start Footer Section -->
+		Start Footer Section
 		<footer class="footer-section">
 			<div class="container relative">
 
@@ -240,7 +233,7 @@
 				<div class="border-top copyright">
 					<div class="row pt-4">
 						<div class="col-lg-6">
-							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co">Untree.co</a> Distributed By <a hreff="https://themewagon.com">ThemeWagon</a>  <!-- License information: https://untree.co/license/ -->
+							<!-- <p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co">Untree.co</a> Distributed By <a hreff="https://themewagon.com">ThemeWagon</a>  <!— License information: https://untree.co/license/ —> -->
             </p>
 						</div>
 
@@ -256,7 +249,7 @@
 
 			</div>
 		</footer>
-		<!-- End Footer Section -->	
+		
 
 	</body>
 

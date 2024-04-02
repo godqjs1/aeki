@@ -56,7 +56,7 @@
                   <li th:if="${session.user}"><a class="nav-link" href="/index" th:text="${session.user.name} + '님'"></a></li>
                   <li th:if="${session.user}"><a class="nav-link" href="/logout">로그아웃</a></li>               
                   <li th:unless="${session.user}"><a class="nav-link" href="/sign"><img src="images/user.svg"></a></li>
-                  <li><a class="nav-link" href="/cart"><img src="images/cart.svg"></a></li>
+                  <li><a class="nav-link" th:href="@{/cart}"><img src="images/cart.svg"></a></li>
                </ul>
             </div>
          </div>
