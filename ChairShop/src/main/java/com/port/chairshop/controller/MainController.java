@@ -1,5 +1,6 @@
 package com.port.chairshop.controller;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -215,8 +216,7 @@ public class MainController {
         
 		return "redirect:/cart";
 		
-	}
-	
+	}	
 	@GetMapping("/cart")
 	public String cart(HttpServletRequest req, Model model) {
 	    HttpSession session = req.getSession(false);
@@ -225,7 +225,14 @@ public class MainController {
 	    String email = userVO.getEmail();
 	    logger.info(email);
 	    List<CartVO> cart = cs.selectCart(email);
-	    model.addAttribute("cart", cart);
+	    model.addAttribute("cart", cart);	    
+	    int total = 0;
+	    DecimalFormat df = new DecimalFormat("#,###");
+        for (CartVO cartVO : cart) {        	        						  			 			 
+            total += cartVO.getPrice() * cartVO.getQty();
+        }
+                
+        model.addAttribute("total", df.format(total));
 	    return "cart"; // 뷰 이름을 반환합니다.
 
 	}

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class CartVO {
 	
 	private String email;
-	private String product;
+	private String product;	
 	private int price;
 	private String img;
 	private int qty;
