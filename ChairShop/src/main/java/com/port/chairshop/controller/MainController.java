@@ -178,10 +178,25 @@ public class MainController {
 			@RequestParam("email") String email, 
 			@RequestParam("product") String product, 
 			@RequestParam("price") int price, 
-			@RequestParam("img") String img) {
+			@RequestParam("img") String img,
+			HttpServletRequest req, RedirectAttributes redirectAttributes) {
 		
 		
 		logger.info("shopCart 진입");
+		
+		HttpSession session = req.getSession(false); // 기존 세션이 있으면 가져옴
+        if (session == null) {
+        	redirectAttributes.addFlashAttribute("check", 2);
+			redirectAttributes.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+	    	return "redirect:/shop";
+        } else {
+        	if (session.getAttribute("user") == null) {
+        		redirectAttributes.addFlashAttribute("check", 2);
+    			redirectAttributes.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+    	    	return "redirect:/shop";
+        	}
+        }
+        
 		
 		CartVO cartVO = new CartVO();
 		cartVO.setEmail(email);
@@ -206,12 +221,13 @@ public class MainController {
 	public String cart(HttpServletRequest req, Model model) {
 	    HttpSession session = req.getSession(false);
 	    UserVO userVO = (UserVO) session.getAttribute("user");
-	    logger.info("qqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+	    logger.info("------------------------");
 	    String email = userVO.getEmail();
 	    logger.info(email);
 	    List<CartVO> cart = cs.selectCart(email);
 	    model.addAttribute("cart", cart);
 	    return "cart"; // 뷰 이름을 반환합니다.
+
 	}
 	
 	@GetMapping("/cart/remove")
