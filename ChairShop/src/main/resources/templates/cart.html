@@ -18,7 +18,7 @@
 					</div>
 				</div>
 			</div>
-		<!-- End Hero Section -->
+		<!-- End Hero Section -->	
 
 		
 
@@ -41,43 +41,29 @@
                       <tbody>
                         <tr th:each="cart : ${cart}">
                           <td class="product-thumbnail">
-                            <img th:src="${cart.img}" alt="Image" class="img-fluid">
+                            <img th:src="@{/images/__${cart.img}__}" alt="Image" class="img-fluid">
                           </td>
                           <td class="product-name">
                               <h2 class="h5 text-black" th:text="${cart.product}"></h2>
                           </td>
-                          <td th:text="${cart.price}"></td>
+                          <td th:text="${#numbers.formatInteger(cart.price,3,'COMMA')}"></td>
                           <td>
                             <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
                               <div class="input-group-prepend">
-                                <button class="btn btn-outline-black decrease" type="button">&minus;</button>
+                                <a th:href="@{/minus(email=${cart.email},product=${cart.product})}" class="btn btn-outline-black decrease">&minus;</a>
                               </div>
+                              
                               <input type="text" class="form-control text-center quantity-amount" th:value="${cart.qty}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                               <div class="input-group-append">
                                 <!-- <button class="btn btn-outline-black increase" type="button">&plus;</button> -->
-                                <button class="btn btn-outline-black increase" type="button" data-url="@{/add(email=${cart.email},product=${cart.product})}">&plus;</button>
+                                <a th:href="@{/add(email=${cart.email},product=${cart.product})}" class="btn btn-outline-black decrease">&plus;</a>
                                 
                               </div>
-                            </div>
-        
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        					
-<script>
-$(document).ready(function() {
-    $('.increase').click(function() {
-        var url = $(this).data('url');
-        window.location.href = url;
-    });
-});
-
-</script> -->
-        
-        
+                            </div>                        
                           </td>                          
-                          <td>$49.00</td>
-                          <td><a th:href="@{/cart/remove(email=${cart.email},product=${cart.product})}" class="btn btn-black btn-sm">X</a></td>
-                          <td><a th:href="@{/add(email=${cart.email},product=${cart.product})}" class="btn btn-black btn-sm">a</a></td>
-                          <td><a th:href="@{/minus(email=${cart.email},product=${cart.product})}" class="btn btn-black btn-sm">m</a></td>
+                          <td th:text="${#numbers.formatInteger(cart.price*cart.qty,3,'COMMA')}"></td>                          
+                          
+                          <td><a th:href="@{/cart/remove(email=${cart.email},product=${cart.product})}" class="btn btn-black btn-sm">X</a></td>                          
                         </tr>                               
                       </tbody>
                     </table>
@@ -85,29 +71,8 @@ $(document).ready(function() {
                 </form>
               </div>
         
-              <!-- <div class="row">
-                <div class="col-md-6">
-                  <div class="row mb-5">
-                    <div class="col-md-6 mb-3 mb-md-0">
-                      <button class="btn btn-black btn-sm btn-block">Update Cart</button>
-                    </div>
-                    <div class="col-md-6">
-                      <button class="btn btn-outline-black btn-sm btn-block">Continue Shopping</button>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <label class="text-black h4" for="coupon">Coupon</label>
-                      <p>Enter your coupon code if you have one.</p>
-                    </div>
-                    <div class="col-md-8 mb-3 mb-md-0">
-                      <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
-                    </div>
-                    <div class="col-md-4">
-                      <button class="btn btn-black">Apply Coupon</button>
-                    </div>
-                  </div>
-                </div>
+              <div class="row">
+               
                 <div class="col-md-6 pl-5">
                   <div class="row justify-content-end">
                     <div class="col-md-7">
@@ -115,21 +80,13 @@ $(document).ready(function() {
                         <div class="col-md-12 text-right border-bottom mb-5">
                           <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
                         </div>
-                      </div>
-                      <div class="row mb-3">
-                        <div class="col-md-6">
-                          <span class="text-black">Subtotal</span>
-                        </div>
-                        <div class="col-md-6 text-right">
-                          <strong class="text-black">$230.00</strong>
-                        </div>
-                      </div>
+                      </div>                     
                       <div class="row mb-5">
                         <div class="col-md-6">
                           <span class="text-black">Total</span>
                         </div>
                         <div class="col-md-6 text-right">
-                          <strong class="text-black">$230.00</strong>
+                          <strong class="text-black" th:text="${total}"></strong>
                         </div>
                       </div>
         
@@ -143,10 +100,9 @@ $(document).ready(function() {
                 </div>
               </div>
             </div>
-          </div> -->
+          </div>
 		
-
-		Start Footer Section
+		
 		<footer class="footer-section">
 			<div class="container relative">
 
