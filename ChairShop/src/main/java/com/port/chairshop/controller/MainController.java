@@ -281,7 +281,12 @@ public class MainController {
 	        return "redirect:/cart";
 	    }  		
 	
-
+		/*
+		 * @GetMapping("/payment") public void payment() {
+		 * 
+		 * }
+		 */
+	 
 	@GetMapping("/orderList")
 	public void orderList() {
 	}
