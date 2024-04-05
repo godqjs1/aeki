@@ -3,6 +3,67 @@
 
 <th:block th:replace="~{/include/header}"></th:block>
 
+<head>
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <!-- iamport.payment.js -->
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <script th:inline="javascript">       
+        var IMP = window.IMP; 
+        IMP.init("imp32588012"); 
+        
+        function generateMerchantUid() {
+            var currentDate = new Date();
+            var year = currentDate.getFullYear();
+            var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+            var day = ('0' + currentDate.getDate()).slice(-2);
+            var hours = ('0' + currentDate.getHours()).slice(-2);
+            var minutes = ('0' + currentDate.getMinutes()).slice(-2);
+            var seconds = ('0' + currentDate.getSeconds()).slice(-2);
+            var milliseconds = ('00' + currentDate.getMilliseconds()).slice(-3);
+
+            // 주문번호 형식: ORDYYYYMMDDHHmmssSSS (예: ORD20240404173015000)
+            var merchantUid = 'ORD' + year + month + day + hours + minutes + seconds + milliseconds;
+
+            return merchantUid;
+        }
+        
+        // 주문 정보 설정
+        var name = "Aeki";                        
+        var amount_s = /*[[${total}]]*/ 0;
+        var amount = parseInt(amount_s.replace(/,/g, ""));        
+        var buyer_name = /*[[${session.user.name}]]*/ "";
+        var email = /*[[${session.user.email}]]*/ "";
+
+        function requestPay() {
+        	alert("결제연동 진입");
+        	var merchantUid = generateMerchantUid(); // generateMerchantUid() 함수 호출하여 merchantUid 변수에 할당
+            IMP.request_pay({                
+                pg: "html5_inicis",
+                pay_method: "card",
+                merchant_uid: merchantUid,   // 주문번호
+                name: name,
+                amount: amount,              // 숫자 타입
+                buyer_name: buyer_name,
+                buyer_email: email,
+                    
+            }, function (rsp) { // callback            	              
+                    console.log(rsp);        			
+       			 //결제 성공 시
+       			if (rsp.success) {
+       				var msg = '결제가 완료되었습니다.';
+       				console.log("결제성공 ");       				       				
+       				document.order.submit();       				
+       			} else {
+       				var msg = '결제에 실패하였습니다.';
+       				msg += '에러내용 : ' + rsp.error_msg;
+       			}
+       			alert(msg);               
+            });
+        }    
+    </script>
+</head>
+<body>        
 		<!-- Start Hero Section -->
 			<div class="hero">
 				<div class="container">
@@ -47,22 +108,18 @@
                               <h2 class="h5 text-black" th:text="${cart.product}"></h2>
                           </td>
                           <td th:text="${#numbers.formatInteger(cart.price,3,'COMMA')}"></td>
-                          <td>
-                            <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
-                              <div class="input-group-prepend">
-                                <a th:href="@{/minus(email=${cart.email},product=${cart.product})}" class="btn btn-outline-black decrease">&minus;</a>
-                              </div>
-                              
-                              <input type="text" class="form-control text-center quantity-amount" th:value="${cart.qty}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                              <div class="input-group-append">
-                                <!-- <button class="btn btn-outline-black increase" type="button">&plus;</button> -->
-                                <a th:href="@{/add(email=${cart.email},product=${cart.product})}" class="btn btn-outline-black decrease">&plus;</a>
-                                
-                              </div>
-                            </div>                        
-                          </td>                          
-                          <td th:text="${#numbers.formatInteger(cart.price*cart.qty,3,'COMMA')}"></td>                          
-                          
+                          <td class="text-center">
+					        <div class="input-group mb-3 d-flex quantity-container justify-content-center align-items-center" style="max-width: 120px;">
+					            <div class="input-group-prepend">
+					                <a th:href="@{/minus(email=${cart.email},product=${cart.product})}" class="btn btn-outline-black decrease">&minus;</a>
+					            </div>
+					            <input type="text" class="form-control text-center quantity-amount" th:value="${cart.qty}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+					            <div class="input-group-append">
+					                <a th:href="@{/add(email=${cart.email},product=${cart.product})}" class="btn btn-outline-black increase">&plus;</a>
+					            </div>
+					        </div>        
+						  </td>
+                          <td th:text="${#numbers.formatInteger(cart.price*cart.qty,3,'COMMA')}"></td>
                           <td><a th:href="@{/cart/remove(email=${cart.email},product=${cart.product})}" class="btn btn-black btn-sm">X</a></td>                          
                         </tr>                               
                       </tbody>
@@ -92,7 +149,7 @@
         
                       <div class="row">
                         <div class="col-md-12">
-                          <button class="btn btn-black btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Proceed To Checkout</button>
+                          <button class="btn btn-black btn-lg py-3 btn-block" onclick="requestPay()">Proceed To Checkout</button>                          
                         </div>
                       </div>
                     </div>
@@ -101,8 +158,9 @@
               </div>
             </div>
           </div>
+</body>		
 		
-		
+		<!-- Start Footer Section -->
 		<footer class="footer-section">
 			<div class="container relative">
 
@@ -205,8 +263,8 @@
 
 			</div>
 		</footer>
+		<!— End Footer Section —>	
 		
-
 	</body>
 
 </html>
