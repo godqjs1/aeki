@@ -277,6 +277,7 @@ public class MainController {
 	public String cart(HttpServletRequest req, RedirectAttributes redirectAttributes, Model model) {
 		
 	    HttpSession session = req.getSession(false);
+	    
 	    if (session == null) {
         	redirectAttributes.addFlashAttribute("check", 2);
 			redirectAttributes.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
@@ -291,6 +292,7 @@ public class MainController {
 	    
 	    UserVO userVO = (UserVO) session.getAttribute("user");
 	    logger.info("------------------------");
+    
 	    String email = userVO.getEmail();
 	    logger.info(email);
 	    List<CartVO> cart = cs.selectCart(email);
@@ -349,8 +351,27 @@ public class MainController {
 	        cs.minus(cartVO);
 	        return "redirect:/cart";
 	    }  		
-	
-	@GetMapping("/orderList")
+			
+	  @GetMapping("/orderInsert")
+	  public String orderInsert(HttpServletRequest req, Model model) {
+		  HttpSession session = req.getSession(false);
+		    UserVO userVO = (UserVO) session.getAttribute("user");	    
+		    String email = userVO.getEmail();
+		    logger.info(email);
+		    List<CartVO> cart = cs.selectCart(email);
+		    model.addAttribute("cart", cart);	    
+		    int total = 0;
+		    DecimalFormat df = new DecimalFormat("#,###");
+	        for (CartVO cartVO : cart) {        	        						  			 			 
+	            total += cartVO.getPrice() * cartVO.getQty();
+	        }
+	                
+	        model.addAttribute("total", df.format(total));
+		    return "cart"; // 뷰 이름을 반환합니다.
+
+	  }	 		 		 		 
+
+	@GetMapping("/myOrders")
 	public String orderList(HttpServletRequest req, RedirectAttributes redirectAttributes) {
 		
 		HttpSession session = req.getSession(false);
@@ -366,7 +387,7 @@ public class MainController {
         	}
         }
 	    
-	    return "orderList";
+	    return "myOrders";
 	}
 
 }
