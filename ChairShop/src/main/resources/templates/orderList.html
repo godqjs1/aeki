@@ -3,65 +3,6 @@
 
 <th:block th:replace="~{/include/header}"></th:block>
 
-<head>
-    <!-- jQuery -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
-    <!-- iamport.payment.js -->
-    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
-    <script th:inline="javascript">       
-        var IMP = window.IMP; 
-        IMP.init("imp32588012"); 
-        
-        function generateMerchantUid() {
-            var currentDate = new Date();
-            var year = currentDate.getFullYear();
-            var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
-            var day = ('0' + currentDate.getDate()).slice(-2);
-            var hours = ('0' + currentDate.getHours()).slice(-2);
-            var minutes = ('0' + currentDate.getMinutes()).slice(-2);
-            var seconds = ('0' + currentDate.getSeconds()).slice(-2);
-            var milliseconds = ('00' + currentDate.getMilliseconds()).slice(-3);
-
-            // 주문번호 형식: ORDYYYYMMDDHHmmssSSS (예: ORD20240404173015000)
-            var merchantUid = 'ORD' + year + month + day + hours + minutes + seconds + milliseconds;
-
-            return merchantUid;
-        }
-        
-        // 주문 정보 설정
-        var name = "Aeki";                        
-        var amount_s = /*[[${total}]]*/ 0;
-        var amount = parseInt(amount_s.replace(/,/g, ""));       
-        var buyer_name = /*[[${session.user.name}]]*/ "";
-        var email = /*[[${session.user.email}]]*/ "";
-
-        function requestPay() {
-        	alert("결제연동 진입");
-        	var merchantUid = generateMerchantUid(); // generateMerchantUid() 함수 호출하여 merchantUid 변수에 할당
-            IMP.request_pay({                
-                pg: "html5_inicis",
-                pay_method: "card",
-                merchant_uid: merchantUid,   // 주문번호
-                name: name,
-                amount: amount,              // 숫자 타입
-                buyer_name: buyer_name,
-                buyer_email: email,
-                    
-            }, function (rsp) { // callback
-                $.ajax({
-                   type: 'POST',
-                   url: '/verify/' + rsp.imp_uid
-                }).done(function(data) {
-                    if(rsp.paid_amount === data.response.amount){
-                        alert("결제 성공");
-                    } else {
-                        alert("결제 실패");
-                    }
-                });
-            });                                    
-        }    
-    </script>
-</head>
 <body>        
 		<!-- Start Hero Section -->
 			<div class="hero">
@@ -69,7 +10,7 @@
 					<div class="row justify-content-between">
 						<div class="col-lg-5">
 							<div class="intro-excerpt">
-								<h1>Cart</h1>
+								<h1>Order details</h1>
 							</div>
 						</div>
 						<div class="col-lg-7">
@@ -95,7 +36,7 @@
                           <th class="product-price">Price</th>
                           <th class="product-quantity">Quantity</th>
                           <th class="product-total">Total</th>
-                          <th class="product-remove">Remove</th>
+                          <th class="product-date">Oder Date</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -128,32 +69,7 @@
               </div>
         
               <div class="row">
-               
-                <div class="col-md-6 pl-5">
-                  <div class="row justify-content-end">
-                    <div class="col-md-7">
-                      <div class="row">
-                        <div class="col-md-12 text-right border-bottom mb-5">
-                          <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
-                        </div>
-                      </div>                     
-                      <div class="row mb-5">
-                        <div class="col-md-6">
-                          <span class="text-black">Total</span>
-                        </div>
-                        <div class="col-md-6 text-right">
-                          <strong class="text-black" th:text="${total}"></strong>
-                        </div>
-                      </div>
-        
-                      <div class="row">
-                        <div class="col-md-12">
-                          <button class="btn btn-black btn-lg py-3 btn-block" onclick="requestPay()">Proceed To Checkout</button>                          
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                               
               </div>
             </div>
           </div>
