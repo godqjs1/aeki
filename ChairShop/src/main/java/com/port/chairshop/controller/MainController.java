@@ -351,7 +351,7 @@ public class MainController {
 	        cs.minus(cartVO);
 	        return "redirect:/cart";
 	    }  		
-			
+  
 	  @GetMapping("/orderInsert")
 	  public String orderInsert(HttpServletRequest req, Model model) {
 		  HttpSession session = req.getSession(false);
@@ -369,8 +369,8 @@ public class MainController {
 	        model.addAttribute("total", df.format(total));
 		    return "cart"; // 뷰 이름을 반환합니다.
 
-	  }	 		 		 		 
-
+	  }	 		 	
+  
 	@GetMapping("/myOrders")
 	public String orderList(HttpServletRequest req, RedirectAttributes redirectAttributes) {
 		
