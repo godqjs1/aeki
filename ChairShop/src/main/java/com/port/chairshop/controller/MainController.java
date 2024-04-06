@@ -23,6 +23,7 @@ import com.port.chairshop.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import retrofit2.http.GET;
 
 @Controller
 public class MainController {
@@ -220,8 +221,7 @@ public class MainController {
 	@GetMapping("/cart")
 	public String cart(HttpServletRequest req, Model model) {
 	    HttpSession session = req.getSession(false);
-	    UserVO userVO = (UserVO) session.getAttribute("user");
-	    logger.info("------------------------");
+	    UserVO userVO = (UserVO) session.getAttribute("user");	    
 	    String email = userVO.getEmail();
 	    logger.info(email);
 	    List<CartVO> cart = cs.selectCart(email);
@@ -281,9 +281,33 @@ public class MainController {
 	        return "redirect:/cart";
 	    }  		
 	
-		  @GetMapping("/orderList") void orderList() {
-		  
-		  }
+		
+	  @GetMapping("/orderInsert")
+	  public String orderInsert(HttpServletRequest req, Model model) {
+		  HttpSession session = req.getSession(false);
+		    UserVO userVO = (UserVO) session.getAttribute("user");	    
+		    String email = userVO.getEmail();
+		    logger.info(email);
+		    List<CartVO> cart = cs.selectCart(email);
+		    model.addAttribute("cart", cart);	    
+		    int total = 0;
+		    DecimalFormat df = new DecimalFormat("#,###");
+	        for (CartVO cartVO : cart) {        	        						  			 			 
+	            total += cartVO.getPrice() * cartVO.getQty();
+	        }
+	                
+	        model.addAttribute("total", df.format(total));
+		    return "cart"; // 뷰 이름을 반환합니다.
+
+	  }
+	 
+		 
+	 
+	 @GetMapping("/myOrders")
+	 public void getMethodName() {
+	 	
+	 }
+	 
 		 
 
 }
