@@ -12,18 +12,22 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.port.chairshop.service.CartService;
 import com.port.chairshop.service.UserService;
 import com.port.chairshop.vo.CartVO;
+import com.port.chairshop.vo.KakaoApi;
 import com.port.chairshop.vo.UserVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Controller
 public class MainController {
 
@@ -41,10 +45,18 @@ public class MainController {
 	
 	/*=================================================== sign ===================================================*/
 	
+//	@Autowired
+	private final KakaoApi kakaoApi;
+	
 	@GetMapping("/sign")
 	public String sign(Model model) {
 		UserVO userVO = new UserVO(); // UserVO 객체 초기화
 		model.addAttribute("user", userVO);
+		
+		// 카카오 로그인시 kakaoApi.java의 private 값들(application-private.properties)을 불러다 사용한다.
+		model.addAttribute("kakaoApiKey", kakaoApi.getKakaoApiKey());
+        model.addAttribute("redirectUri", kakaoApi.getKakaoRedirectUri());
+        
 		return "/sign";
 	}
 	
@@ -150,6 +162,46 @@ public class MainController {
 		
 	}
 	
+	/*=================================================== 카카오 로그인 ===================================================*/
+	
+	@GetMapping("/login/oauth2/code/kakao")
+    public String kakaoLogin(@RequestParam("code") String code, HttpServletRequest req){
+        // 1. 인가 코드 받기 (@RequestParam String code)
+		logger.info("------------인가 코드 받기------------");
+        // 2. 토큰 받기
+        String accessToken = kakaoApi.getAccessToken(code);
+        logger.info("------------토큰 받기------------");
+        // 3. 사용자 정보 받기
+        Map<String, Object> userInfo = kakaoApi.getUserInfo(accessToken);
+
+        String email = (String)userInfo.get("email");
+        String nickname = (String)userInfo.get("nickname");
+        
+        System.out.println("email = " + email);
+        System.out.println("nickname = " + nickname);
+        System.out.println("accessToken = " + accessToken);
+        
+        UserVO userVO = new UserVO();
+        userVO.setEmail(email);
+        UserVO selectVO = us.selectUser(userVO); 
+        
+        if(selectVO == null) {
+        	
+        } else {
+        	logger.info("-----------else else else------------");
+        	HttpSession session = req.getSession();
+        	
+        	session.setAttribute("user", selectVO);
+        	session.setAttribute("accessToken", accessToken);
+        	session.setAttribute("kakaoApiKey", kakaoApi.getKakaoApiKey());
+        	session.setAttribute("logoutRedirectUri", kakaoApi.getLogoutRedirectUri());
+        	logger.info("------------코드 받기------------" + kakaoApi.getKakaoApiKey() + kakaoApi.getLogoutRedirectUri());
+	    	return "redirect:/index";
+        }
+        
+        return "redirect:/sign";
+    }
+	
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest req) {
 		
@@ -161,6 +213,10 @@ public class MainController {
 		
 		HttpSession session = req.getSession(false); // 기존 세션이 있으면 가져옴
         if (session != null) {
+        	logger.info("------------accessToken 받기------------");
+//        	String accessToken = (String)session.getAttribute("accessToken");
+//            kakaoApi.kakaoLogout(accessToken);
+             
             session.invalidate(); // 세션을 무효화하여 삭제
         }
         
@@ -189,12 +245,12 @@ public class MainController {
         if (session == null) {
         	redirectAttributes.addFlashAttribute("check", 2);
 			redirectAttributes.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
-	    	return "redirect:/shop";
+	    	return "redirect:/sign";
         } else {
         	if (session.getAttribute("user") == null) {
         		redirectAttributes.addFlashAttribute("check", 2);
     			redirectAttributes.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
-    	    	return "redirect:/shop";
+    	    	return "redirect:/sign";
         	}
         }
         
@@ -218,8 +274,21 @@ public class MainController {
 		
 	}	
 	@GetMapping("/cart")
-	public String cart(HttpServletRequest req, Model model) {
+	public String cart(HttpServletRequest req, RedirectAttributes redirectAttributes, Model model) {
+		
 	    HttpSession session = req.getSession(false);
+	    if (session == null) {
+        	redirectAttributes.addFlashAttribute("check", 2);
+			redirectAttributes.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+	    	return "redirect:/sign";
+        } else {
+        	if (session.getAttribute("user") == null) {
+        		redirectAttributes.addFlashAttribute("check", 2);
+    			redirectAttributes.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+    	    	return "redirect:/sign";
+        	}
+        }
+	    
 	    UserVO userVO = (UserVO) session.getAttribute("user");
 	    logger.info("------------------------");
 	    String email = userVO.getEmail();
@@ -281,9 +350,23 @@ public class MainController {
 	        return "redirect:/cart";
 	    }  		
 	
-		  @GetMapping("/orderList") void orderList() {
-		  
-		  }
-		 
+	@GetMapping("/orderList")
+	public String orderList(HttpServletRequest req, RedirectAttributes redirectAttributes) {
+		
+		HttpSession session = req.getSession(false);
+	    if (session == null) {
+        	redirectAttributes.addFlashAttribute("check", 2);
+			redirectAttributes.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+	    	return "redirect:/sign";
+        } else {
+        	if (session.getAttribute("user") == null) {
+        		redirectAttributes.addFlashAttribute("check", 2);
+    			redirectAttributes.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+    	    	return "redirect:/sign";
+        	}
+        }
+	    
+	    return "orderList";
+	}
 
 }

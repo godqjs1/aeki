@@ -54,7 +54,12 @@
 
                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">   
                   <li th:if="${session.user}"><a class="nav-link" href="/index" th:text="${session.user.name} + '님'"></a></li>
-                  <li th:if="${session.user}"><a class="nav-link" href="/logout">로그아웃</a></li>               
+                  <li th:if="${session.kakaoApiKey}">
+                  	<a class="nav-link" th:href="@{https://kauth.kakao.com/oauth/logout(client_id=${session.kakaoApiKey}, logout_redirect_uri=${session.logoutRedirectUri})}">로그아웃</a>
+           		  </li>
+                  <li th:if="${session.kakaoApiKey} == null and ${session.user} != null">
+			      	<a class="nav-link" href="/logout">로그아웃</a>
+				  </li>
                   <li th:unless="${session.user}"><a class="nav-link" href="/sign"><img src="images/user.svg"></a></li>
                   <li><a class="nav-link" th:href="@{/cart}"><img src="images/cart.svg"></a></li>
                </ul>
