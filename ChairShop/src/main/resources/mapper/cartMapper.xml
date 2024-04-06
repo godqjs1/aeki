@@ -33,7 +33,7 @@
 	<update id="minusCart" parameterType="com.port.chairshop.vo.CartVO">
         UPDATE cart
         SET qty = qty - 1
-        WHERE email = #{email} AND product = #{product} AND qty > 0
+        WHERE email = #{email} AND product = #{product} AND qty > 1
     </update>
 	
 </mapper>
