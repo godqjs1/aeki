@@ -350,7 +350,7 @@ public class MainController {
 	        return "redirect:/cart";
 	    }  		
 	
-	@GetMapping("/orderList")
+	@GetMapping("/myOrders")
 	public String orderList(HttpServletRequest req, RedirectAttributes redirectAttributes) {
 		
 		HttpSession session = req.getSession(false);
@@ -366,7 +366,7 @@ public class MainController {
         	}
         }
 	    
-	    return "orderList";
+	    return "myOrders";
 	}
 
 }
