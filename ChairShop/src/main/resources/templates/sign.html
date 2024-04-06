@@ -34,7 +34,7 @@
         <input type="password" placeholder="Password" name="password">
         <span class="text-danger" th:text="${valid_password}"></span>
         <button class="form_btn">Sign In</button>
-        <a style="margin-top: 1rem;" href="#">
+        <a style="margin-top: 1rem;"th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${kakaoApiKey}, redirect_uri=${redirectUri}, response_type='code')}">
         	<img src="images/kakao_login_medium_narrow.png">
     	</a>
     	<input type="hidden" name="name" value="name">
