@@ -171,7 +171,7 @@ public class MainController {
 	/*=================================================== 카카오 로그인 ===================================================*/
 	
 	@GetMapping("/login/oauth2/code/kakao")
-    public String kakaoLogin(@RequestParam("code") String code, HttpServletRequest req){
+    public String kakaoLogin(@RequestParam("code") String code, HttpServletRequest req, RedirectAttributes redirectAttributes){
         // 1. 인가 코드 받기 (@RequestParam String code)
 		logger.info("------------인가 코드 받기------------");
         // 2. 토큰 받기
@@ -192,7 +192,9 @@ public class MainController {
         UserVO selectVO = us.selectUser(userVO); 
         
         if(selectVO == null) {
-        	
+        	redirectAttributes.addFlashAttribute("check", 2);
+	    	redirectAttributes.addFlashAttribute("msg", "가입된 정보가 없습니다.");
+	    	return "redirect:/sign";
         } else {
         	logger.info("-----------else else else------------");
         	HttpSession session = req.getSession();
@@ -205,7 +207,7 @@ public class MainController {
 	    	return "redirect:/index";
         }
         
-        return "redirect:/sign";
+//        return "redirect:/sign";
     }
 	
 	@GetMapping("/logout")
