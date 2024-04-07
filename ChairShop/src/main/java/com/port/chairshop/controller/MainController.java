@@ -1,25 +1,28 @@
 package com.port.chairshop.controller;
 
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.port.chairshop.service.CartService;
+import com.port.chairshop.service.OrderService;
 import com.port.chairshop.service.UserService;
 import com.port.chairshop.vo.CartVO;
 import com.port.chairshop.vo.KakaoApi;
+import com.port.chairshop.vo.OrderVO;
 import com.port.chairshop.vo.UserVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +41,9 @@ public class MainController {
 	
 	@Autowired
 	CartService cs;
+	
+	@Autowired
+	OrderService os;
 	
 	@GetMapping("/index")
 	public void index() {
@@ -319,8 +325,7 @@ public class MainController {
 			cartVO.setEmail(email);
 	        cartVO.setProduct(product);	        
 	        
-	        cs.deleteCart(cartVO);
-	        logger.info("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+	        cs.deleteCart(cartVO);	        
 	        return "redirect:/cart";
     }
 	
@@ -356,24 +361,18 @@ public class MainController {
 	  public String orderInsert(HttpServletRequest req, Model model) {
 		  HttpSession session = req.getSession(false);
 		    UserVO userVO = (UserVO) session.getAttribute("user");	    
-		    String email = userVO.getEmail();
-		    logger.info(email);
-		    List<CartVO> cart = cs.selectCart(email);
-		    model.addAttribute("cart", cart);	    
-		    int total = 0;
-		    DecimalFormat df = new DecimalFormat("#,###");
-	        for (CartVO cartVO : cart) {        	        						  			 			 
-	            total += cartVO.getPrice() * cartVO.getQty();
-	        }
-	                
-	        model.addAttribute("total", df.format(total));
-		    return "cart"; // 뷰 이름을 반환합니다.
+		    String email = userVO.getEmail();		   
+		    os.insert(email);
+		    
+		    os.delete(email);
+		    
+		    return "/myOrders";
 
 	  }	 		 	
   
 	@GetMapping("/myOrders")
-	public String orderList(HttpServletRequest req, RedirectAttributes redirectAttributes) {
-		
+	public String myOrders(HttpServletRequest req, RedirectAttributes redirectAttributes, Model model) {
+		logger.info("myorders진입");
 		HttpSession session = req.getSession(false);
 	    if (session == null) {
         	redirectAttributes.addFlashAttribute("check", 2);
@@ -385,9 +384,34 @@ public class MainController {
     			redirectAttributes.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
     	    	return "redirect:/sign";
         	}
-        }
+        }	    
+	    UserVO userVO = (UserVO) session.getAttribute("user");	    
+	    String email = userVO.getEmail();
+	    List<OrderVO> order = os.selectOrder(email);	    
+	    int total = 0;
+	    DecimalFormat df = new DecimalFormat("#,###");
+	    for (OrderVO orderVO : order) {        	        						  			 			 
+            total += orderVO.getPrice() * orderVO.getQty();
+        }	    
+	    model.addAttribute("order", order);
+        model.addAttribute("total", df.format(total));	   
 	    
-	    return "myOrders";
+	    return "/myOrders";
 	}
-
+	
+	@GetMapping("/order/remove")
+	public String remove(@RequestParam("email") String email, 
+	                     @RequestParam("product") String product, 
+	                     @RequestParam("orderDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date orderDate) {
+	    // 이제 orderDate 매개변수는 정상적으로 매핑됩니다.
+		 OrderVO orderVO = new OrderVO(); 
+	    // 이후에 필요한 작업을 수행하세요.
+		 orderVO.setEmail(email);
+		 orderVO.setProduct(product);
+		 orderVO.setOrderDate(orderDate);
+		 
+		 os.orderDelete(orderVO);
+		 return "redirect:/myOrders";		 
+	}			
+		
 }

@@ -37,30 +37,26 @@
                           <th class="product-quantity">Quantity</th>
                           <th class="product-total">Total</th>
                           <th class="product-date">Oder Date</th>
+                          <th class="product-remove">Remove</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr th:each="cart : ${cart}">
+                        <tr th:each="order : ${order}">
                           <td class="product-thumbnail">
-                            <img th:src="@{/images/__${cart.img}__}" alt="Image" class="img-fluid">
+                            <img th:src="@{/images/__${order.img}__}" alt="Image" class="img-fluid">
                           </td>
                           <td class="product-name">
-                              <h2 class="h5 text-black" th:text="${cart.product}"></h2>
+                              <h2 class="h5 text-black" th:text="${order.product}"></h2>
                           </td>
-                          <td th:text="${#numbers.formatInteger(cart.price,3,'COMMA')}"></td>
-                          <td class="text-center">
-					        <div class="input-group mb-3 d-flex quantity-container justify-content-center align-items-center" style="max-width: 120px;">
-					            <div class="input-group-prepend">
-					                <a th:href="@{/minus(email=${cart.email},product=${cart.product})}" class="btn btn-outline-black decrease">&minus;</a>
-					            </div>
-					            <input type="text" class="form-control text-center quantity-amount" th:value="${cart.qty}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-					            <div class="input-group-append">
-					                <a th:href="@{/add(email=${cart.email},product=${cart.product})}" class="btn btn-outline-black increase">&plus;</a>
-					            </div>
-					        </div>        
+                          <td th:text="${#numbers.formatInteger(order.price,3,'COMMA')}"></td>
+                          <td class="text-center" th:text="${order.qty}">					       	
 						  </td>
-                          <td th:text="${#numbers.formatInteger(cart.price*cart.qty,3,'COMMA')}"></td>
-                          <td><a th:href="@{/cart/remove(email=${cart.email},product=${cart.product})}" class="btn btn-black btn-sm">X</a></td>                          
+                          <td th:text="${#numbers.formatInteger(order.price*order.qty,3,'COMMA')}"></td>
+                          <td class="text-center" th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                          <!-- <td><a th:href="@{/order/remove(email=${order.email}, product=${order.product}, orderDate=${#dates.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')}}" class="btn btn-black btn-sm">X</a></td> -->                                                    
+                          <td><a th:href="@{/order/remove(email=${order.email}, product=${order.product}, orderDate=${#dates.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')})}" class="btn btn-black btn-sm">X</a></td>
+
+                          
                         </tr>                               
                       </tbody>
                     </table>
