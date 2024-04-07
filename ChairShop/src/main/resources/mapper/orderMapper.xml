@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.port.chairshop.OrderMapper">
+
+	
+	
+	<insert id="insert" parameterType="com.port.chairshop.vo.OrderVO">
+		INSERT INTO `order`
+					(email, product, qty, price, img) 
+					SELECT email, product, qty, price, img 
+					FROM `cart` WHERE email = #{email};
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM `cart` WHERE email = '${email}'
+	</delete>
+	
+	<select id="selectOrder" parameterType="String">
+		select * from `order` where email= '${email}' order by orderDate desc
+	</select>
+	
+	<delete id="orderDelete" parameterType="com.port.chairshop.vo.OrderVO">
+		DELETE FROM `order`
+        WHERE email = #{email}
+        AND product = #{product}
+        AND orderDate = #{orderDate}
+	</delete>
+	
+</mapper>
