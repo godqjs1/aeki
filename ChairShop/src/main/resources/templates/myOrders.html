@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:replace="~{/include/header}"></th:block>
+<th:block th:replace="~{include/header}"></th:block>
 
 <body>        
 		<!-- Start Hero Section -->
@@ -54,7 +54,7 @@
                           <td th:text="${#numbers.formatInteger(order.price*order.qty,3,'COMMA')}"></td>
                           <td class="text-center" th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                           <!-- <td><a th:href="@{/order/remove(email=${order.email}, product=${order.product}, orderDate=${#dates.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')}}" class="btn btn-black btn-sm">X</a></td> -->                                                    
-                          <td><a th:href="@{/order/remove(email=${order.email}, product=${order.product}, orderDate=${#dates.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')})}" class="btn btn-black btn-sm">X</a></td>
+                          <td><a th:href="@{/orderRemove(email=${order.email}, product=${order.product}, orderDate=${#dates.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')})}" class="btn btn-black btn-sm">X</a></td>
 
                           
                         </tr>                               

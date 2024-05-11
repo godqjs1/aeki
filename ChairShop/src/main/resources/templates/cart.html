@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:replace="~{/include/header}"></th:block>
+<th:block th:replace="~{include/header}"></th:block>
 
 <head>
     <!-- jQuery -->
@@ -30,9 +30,9 @@
         
         // 주문 정보 설정
         var name = "Aeki";                        
-        //var amount = 100;
+        var amount = 100;
         var amount_s = /*[[${total}]]*/ 0;
-        var amount = parseInt(amount_s.replace(/,/g, "")); 
+        //var amount = parseInt(amount_s.replace(/,/g, "")); 
         var buyer_name = /*[[${session.user.name}]]*/ "";
         var email = /*[[${session.user.email}]]*/ "";
 
@@ -131,7 +131,7 @@
                        </div>        
                     </td>
                           <td th:text="${#numbers.formatInteger(cart.price*cart.qty,3,'COMMA')}"></td>
-                          <td><a th:href="@{/cart/remove(email=${cart.email},product=${cart.product})}" class="btn btn-black btn-sm">X</a></td>                          
+                          <td><a th:href="@{/cartRemove(email=${cart.email},product=${cart.product})}" class="btn btn-black btn-sm">X</a></td>                          
                         </tr>                               
                       </tbody>
                     </table>
